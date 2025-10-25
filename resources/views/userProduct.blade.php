@@ -9,9 +9,9 @@
 </head>
 <body>
 <header>
-    <a href="/profile">Профиль</a>
-    <a href="/catalog">Каталог</a>
-    <a href="/logout">Выйти</a>
+    <a href={{route('profile')}}>Профиль</a>
+    <a href={{route('catalog')}}>Каталог</a>
+    <a href={{route('logout')}}>Выйти</a>
 </header>
 <main>
     <h1>Корзина</h1>

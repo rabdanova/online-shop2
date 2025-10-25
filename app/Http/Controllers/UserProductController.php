@@ -10,10 +10,6 @@ class UserProductController
 {
     public function cart()
     {
-        if (!Auth::check()) {
-            return redirect('/login');
-        }
-
         $userId = Auth::id();
         $userProducts = UserProduct::query()->where('user_id', $userId)->get();
         $cart = [];

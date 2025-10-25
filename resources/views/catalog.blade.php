@@ -8,10 +8,10 @@
 </head>
 <body>
 <header>
-    <a href="/profile">Профиль</a>
-    <a href="/cart">Корзина
+    <a href={{route('profile')}}>Профиль</a>
+    <a href={{route('cart')}}>Корзина
     </a>
-    <a href="/logout">Выйти</a>
+    <a href={{route('logout')}}>Выйти</a>
 </header>
 <main>
     <h1>Смартфоны и гаджеты</h1>

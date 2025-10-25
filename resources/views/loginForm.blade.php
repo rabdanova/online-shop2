@@ -12,7 +12,7 @@
     <div class="text">
         Login Form
     </div>
-    <form action="/login" method="POST">
+    <form action={{route('post.login')}} method="POST">
         @csrf
         <div class="field">
             <input type="text" id="email" name="email" required>

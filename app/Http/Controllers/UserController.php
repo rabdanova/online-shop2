@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EditProfileRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignUpRequest;
 use App\Models\User;
@@ -49,5 +50,28 @@ class UserController
         return response()->redirectTo('/catalog');
     }
 
+    public function editProfile(EditProfileRequest $request)
+    {
+        $user = Auth::user();
+
+        if ($request->filled('name')) {
+            $user->name = $request->input('name');
+        }
+        if ($request->filled('email')) {
+            $user->email = $request->input('email');
+        }
+        if ($request->filled('NewPassword')) {
+            $user->password = Hash::make($request->input('NewPassword'));
+        }
+        $user->save();
+
+        return view('editProfileForm', ['user' => $user]);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect('/login');
+    }
 
 }

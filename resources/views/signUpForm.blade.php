@@ -12,7 +12,7 @@
     <div class="text">
         Sign up Form
     </div>
-    <form action="/signUp" method="POST">
+    <form action={{route('post.signUp')}} method="POST">
         @csrf
         <div class="field">
             @error('name')
@@ -46,7 +46,7 @@
         <button>Sign up</button>
         <div class="sign-up">
             Have an account?
-            <a href="/login">sign in now</a>
+            <a href={{route('login')}}>sign in now</a>
         </div>
     </form>
 </div>
