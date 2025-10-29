@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserProductController;
@@ -26,3 +27,6 @@ Route::middleware(['auth'])->get('/profile', [UserController::class,'getProfile'
 Route::middleware(['auth'])->get('/editProfile', [UserController::class,'editProfile'])->name('editProfile');
 Route::middleware(['auth'])->post('/editProfile', [UserController::class,'editProfile'])->name('post.editProfile');
 
+Route::middleware(['auth'])->get('/checkoutForm', [OrderController::class,'getCheckoutForm'])->name('checkoutForm');
+Route::middleware(['auth'])->post('/createOrder', [OrderController::class,'getOrderForm'])->name('createOrder');
+Route::get('/product/{id}', [ProductController::class,'getProduct']);

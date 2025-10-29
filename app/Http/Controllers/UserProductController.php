@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\User;
 use App\Models\UserProduct;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,15 +11,13 @@ class UserProductController
 {
     public function cart()
     {
-        $userId = Auth::id();
-        $userProducts = UserProduct::query()->where('user_id', $userId)->get();
+        /** @var User $user */
+        $user = Auth::user();
+        $userProducts = $user->userProducts()->with('product')->get();
         $cart = [];
 
         foreach ($userProducts as $userProduct) {
-
-            $productId = $userProduct->product_id;
-            $product = Product::find($productId);
-
+            $product = $userProduct->product;
             if ($product) {
                 $product->amount = $userProduct->amount;
                 $cart[] = $product;
@@ -40,7 +39,7 @@ class UserProductController
                 'amount' => 1
             ]);
         } else {
-            UserProduct::query()->increment('amount');
+            $result->increment('amount');
         }
 
     }

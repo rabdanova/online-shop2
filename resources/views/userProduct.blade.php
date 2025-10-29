@@ -1,34 +1,21 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Каталог товаров</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap" rel="stylesheet" />
-
-</head>
-<body>
-<header>
-    <a href={{route('profile')}}>Профиль</a>
-    <a href={{route('catalog')}}>Каталог</a>
-    <a href={{route('logout')}}>Выйти</a>
-</header>
 <main>
     <h1>Корзина</h1>
-    <div class="cart">
-        @foreach($cart as $userProduct)
-            <div class="product-card">
-                <img src="{{ $userProduct->image_url }}" alt="{{ $userProduct->name }}" class="product-image" />
-                <div class="product-title">{{ $userProduct->name }}</div>
-                <div class="product-description">{{ $userProduct->description }}</div>
-                <div class="product-price">{{ number_format($userProduct->price, 0, '.', ' ') }} ₽</div>
-                <div> Количество: {{ number_format($userProduct->amount) }}</div>
-            </div>
-
-        @endforeach
+    <div class="cart-wrapper">
+        <div class="cart">
+            @foreach($cart as $userProduct)
+                <div class="product-card">
+                    <img src="{{ $userProduct->image_url }}" alt="{{ $userProduct->name }}" class="product-image" />
+                    <div class="product-title">{{ $userProduct->name }}</div>
+                    <div class="product-description">{{ $userProduct->description }}</div>
+                    <div class="product-price">{{ number_format($userProduct->price, 0, '.', ' ') }} ₽</div>
+                    <div>Количество: {{ number_format($userProduct->amount) }}</div>
+                </div>
+            @endforeach
+        </div>
+        <a href="{{ route('checkoutForm') }}" class="btn-checkout">Оформить заказ</a>
     </div>
-
 </main>
+
 <style>
     body {
         font-family: 'Open Sans', Arial, sans-serif;
@@ -85,10 +72,14 @@
         text-align: center;
         text-shadow: 1px 1px 4px rgba(94, 89, 110, 0.3);
     }
+    .cart-wrapper {
+        position: relative;
+    }
     .cart {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 40px;
+        padding-bottom: 80px; /* чтобы было место для кнопки */
     }
     .product-card {
         background: white;
@@ -106,10 +97,10 @@
     }
     .product-image {
         width: 100%;
-        height: auto;           /* Убираем фиксированную высоту */
-        max-height: 300px;      /* Максимальная высота, можно менять */
+        height: auto;
+        max-height: 300px;
         border-radius: 12px;
-        object-fit: contain;    /* Чтобы вся картинка помещалась */
+        object-fit: contain;
         margin-bottom: 18px;
         box-shadow: 0 4px 15px rgba(74, 51, 152, 0.15);
         transition: transform 0.35s ease;
@@ -139,7 +130,22 @@
         text-align: right;
         letter-spacing: 0.02em;
     }
+    .btn-checkout {
+        position: absolute;
+        right: 0;
+        bottom: -60px;
+        padding: 14px 30px;
+        background-color: #cd1352;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        border-radius: 12px;
+        text-decoration: none;
+        box-shadow: 0 6px 20px rgba(197, 43, 56, 0.4);
+        transition: background-color 0.3s ease;
+    }
+    .btn-checkout:hover {
+        background-color: #a0113f;
+    }
 </style>
-</body>
-</html>
-

@@ -13,4 +13,11 @@ class ProductController
 
         return view('catalog', compact('products'));
     }
+
+    public function getProduct(int $id)
+    {
+        $result = Product::query()->find($id);
+
+        print_r($result);
+    }
 }
