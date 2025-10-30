@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddReviewRequest;
 use App\Models\Product;
+use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController
@@ -14,10 +16,30 @@ class ProductController
         return view('catalog', compact('products'));
     }
 
-    public function getProduct(int $id)
+    public function getProductPage(int $id)
     {
-        $result = Product::query()->find($id);
+        $product = Product::with('reviews')->findOrFail($id);
+        $reviews = $product->reviews;
 
-        print_r($result);
+        $averageRating = $reviews->avg('rating') ?? 0;
+        $averageRating = round($averageRating, 2);
+
+        return view('productPage', compact('product', 'averageRating', 'reviews'));
+    }
+
+    public function addReview(AddReviewRequest $request)
+    {
+        $userId = Auth::id();
+
+        Review::query()->create([
+            'product_id' => $request->input('product_id'),
+            'user_id' => $userId,
+            'name' => $request->input('name'),
+            'rating' => $request->input('rating'),
+            'comment' => $request->input('comment'),
+        ]);
+
+        return redirect()->route('productPage', ['id' => $request->input('product_id')]);
+
     }
 }

@@ -9,8 +9,8 @@
 <body>
 <header>
     <a href={{route('profile')}}>Профиль</a>
-    <a href={{route('cart')}}>Корзина
-    </a>
+    <a href={{route('cart')}}>Корзина</a>
+    <a href={{route('userOrders')}}>Заказы</a>
     <a href={{route('logout')}}>Выйти</a>
 </header>
 <main>
@@ -24,19 +24,23 @@
                 <div class="price-and-button">
                     <div class="product-price">{{ number_format($product->price, 0, '.', ' ') }} ₽</div>
 
-                        <div class="quantity-control">
-                            <form class="addUserProduct" onsubmit="return false" class="adjust-form-inline">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <button type="submit" name="action" value="increase" class="btn-adjust-inline">+</button>
-                            </form>
+                    <div class="quantity-control" style="position: static; display: flex; align-items: center; gap: 8px; background: transparent; padding: 0; box-shadow: none;">
+                        <a href="{{ route('productPage', ['id' => $product->id]) }}" class="btn-details" style="margin:0; margin-left: 12px; line-height: 1;">
+                            Подробнее
+                        </a>
 
-                            <form class="removeUserProduct" onsubmit="return false" class="adjust-form-inline">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <button type="submit" name="action" value="decrease" class="btn-adjust-inline">−</button>
-                            </form>
-                        </div>
+                        <form class="addUserProduct" onsubmit="return false" style="margin: 0;">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <button type="submit" name="action" value="increase" class="btn-adjust-inline">+</button>
+                        </form>
+
+                        <form class="removeUserProduct" onsubmit="return false" style="margin: 0;">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <button type="submit" name="action" value="decrease" class="btn-adjust-inline">−</button>
+                        </form>
+                    </div>
                 </div>
 
             </div>
@@ -241,6 +245,20 @@
         font-weight: 700;
         font-size: 16px;
         user-select: none;
+    }
+
+    .btn-details{
+        padding: 6px 12px;
+        font-size: 16px;
+        border-radius: 6px;
+        background-color: #cd1352;
+        color: white;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
     }
 
 </style>

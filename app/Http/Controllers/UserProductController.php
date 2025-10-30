@@ -23,6 +23,9 @@ class UserProductController
                 $cart[] = $product;
             }
         }
+
+        $cart = collect($cart);
+
         return view('userProduct', compact('cart'));
     }
 

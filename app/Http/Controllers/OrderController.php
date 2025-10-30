@@ -18,36 +18,11 @@ class OrderController
     }
     public function getCheckoutForm()
     {
-        $user = Auth::id();
-
-        $userProducts = UserProduct::query()->where('user_id', $user)->get();
-
-        $userProductsForOrder = [];
-        $totalSum = 0;
-
-        foreach ($userProducts as $userProduct) {
-            $product = $userProduct->product;
-
-            if ($product) {
-                $price = $product->price;
-                $name = $product->name;
-                $amount = $userProduct->amount;
-                $sum = $price * $amount;
-                $totalSum += $sum;
-
-                $userProductsForOrder[] = [
-                    'product_id' => $product->id,
-                    'name' => $name,
-                    'price' => $price,
-                    'amount' => $amount,
-                    'sum' => $sum
-                ];
-            }
-        }
+       $data = $this->orderService->getCheckoutForm();
 
         return view('orderForm', [
-            'userProductsForOrder' => $userProductsForOrder,
-            'totalSum' => $totalSum,
+            'userProductsForOrder' => $data['userProductsForOrder'],
+            'totalSum' => $data['totalSum'],
         ]);
     }
 
@@ -55,5 +30,14 @@ class OrderController
     {
         $this->orderService->createOrder($request);
         return response()->redirectTo('/catalog');
+    }
+
+    public function getUserOrders(){
+
+        $userOrders = $this->orderService->getAll();
+
+        return view('userOrdersForm', [
+            'userOrders' => $userOrders,
+        ]);
     }
 }

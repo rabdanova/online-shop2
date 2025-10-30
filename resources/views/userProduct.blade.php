@@ -1,3 +1,10 @@
+<header>
+    <a href={{route('profile')}}>Профиль</a>
+    <a href={{route('catalog')}}>Каталог
+    </a>
+    <a href={{route('userOrders')}}>Заказы</a>
+    <a href={{route('logout')}}>Выйти</a>
+</header>
 <main>
     <h1>Корзина</h1>
     <div class="cart-wrapper">
@@ -12,7 +19,10 @@
                 </div>
             @endforeach
         </div>
-        <a href="{{ route('checkoutForm') }}" class="btn-checkout">Оформить заказ</a>
+
+        @if($cart->isNotEmpty())
+            <a href="{{ route('checkoutForm') }}" class="btn-checkout">Оформить заказ</a>
+        @endif
     </div>
 </main>
 

@@ -10,6 +10,7 @@
 <header>
     <a href={{route('catalog')}}>Каталог</a>
     <a href={{route('cart')}}>Корзина</a>
+    <a href={{route('userOrders')}}>Заказы</a>
     <a href={{route('logout')}}>Выйти</a>
 </header>
 <main>
