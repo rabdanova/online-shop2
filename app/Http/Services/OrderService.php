@@ -2,12 +2,14 @@
 
 namespace App\Http\Services;
 
+use App\Http\DTO\OrderCreateDTO;
 use App\Http\Requests\CreateOrderRequest;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\UserProduct;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
@@ -46,56 +48,42 @@ class OrderService
         ];
     }
 
-    public function createOrder(CreateOrderRequest $request)
+    public function createOrder(OrderCreateDTO $orderCreateDTO)
     {
         $user = Auth::id();
-
-        $order = Order::query()->create([
-            'user_id' => $user,
-            'name' => $request['name'],
-            'phone_number' => $request['phone_number'],
-            'address' => $request['address'],
-            'comment' => $request['comment'],
-        ]);
 
         $userProducts = UserProduct::with('product')->where('user_id', $user)->get();
 
-        foreach ($userProducts as $userProduct) {
-//            print_r($userProduct->product->id);exit;
-            if ($userProduct->product) {
-                OrderProduct::create([
-                    'order_id' => $order->id,
-                    'product_id' => $userProduct->product->id,
-                    'amount' => $userProduct->amount,
-                ]);
+        DB::beginTransaction();
+
+        try {
+
+            $order = Order::query()->create([
+                'user_id' => $user,
+                'name' => $orderCreateDTO->getName(),
+                'phone_number' => $orderCreateDTO->getPhoneNumber(),
+                'address' => $orderCreateDTO->getAddress(),
+                'comment' => $orderCreateDTO->getComment(),
+            ]);
+
+            foreach ($userProducts as $userProduct) {
+                if ($userProduct->product) {
+                    OrderProduct::create([
+                        'order_id' => $order->id,
+                        'product_id' => $userProduct->product->id,
+                        'amount' => $userProduct->amount,
+                    ]);
+                }
+
+                UserProduct::query()->where('user_id', $user)->delete();
             }
+            DB::commit();
+        } catch (\Throwable $exception) {
+            DB::rollBack();
 
-            UserProduct::query()->where('user_id', $user)->delete();
-        }
-    }
-
-    public function getAll()
-    {
-        $user = Auth::id();
-        $userOrders = Order::with('orderProducts.product')->where('user_id', $user)->get();
-
-        foreach ($userOrders as $userOrder) {
-            $sum = 0;
-            foreach ($userOrder->orderProducts as $orderProduct) {
-
-                $product = $orderProduct->product;
-
-                $orderProduct->name = $product->name;
-                $orderProduct->price = $product->price;
-                $orderProduct->image_url = $product->image_url;
-                $orderProduct->totalSum = $orderProduct->amount * $product->price;
-
-                $sum += $orderProduct->totalSum;
-            }
-
-            $userOrder->total = $sum;
+            throw $exception;
         }
 
-        return $userOrders;
     }
+
 }

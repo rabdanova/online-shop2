@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Order extends Model
 {
+    protected $appends = ['total'];
+
     protected $fillable = [
         'user_id',
         'name',
@@ -25,6 +27,13 @@ class Order extends Model
     public function orderProducts()
     {
         return $this->hasMany(OrderProduct::class, 'order_id', 'id');
+    }
+
+    public function getTotalAttribute()
+    {
+        return $this->orderProducts->sum(function ($orderProduct) {
+            return $orderProduct->totalSum;
+        });
     }
 
 }

@@ -37,9 +37,9 @@
             <tbody>
             @foreach($userOrder->orderProducts as $orderProduct)
                 <tr>
-                    <td>{{ $orderProduct->name }}</td>
-                    <td><img src="{{ $orderProduct->image_url }}" alt="Фото {{ $orderProduct->name }}"></td>
-                    <td>{{ number_format($orderProduct->price, 0, '.', ' ') }} ₽</td>
+                    <td>{{ $orderProduct->product->name }}</td>
+                    <td><img src="{{ $orderProduct->product->image_url }}" alt="Фото {{ $orderProduct->product->name }}"></td>
+                    <td>{{ number_format($orderProduct->product->price, 0, '.', ' ') }} ₽</td>
                     <td>{{ $orderProduct->amount }}</td>
                     <td>{{ number_format($orderProduct->totalSum, 0, '.', ' ') }} ₽</td>
                 </tr>

@@ -27,4 +27,9 @@ class OrderProduct extends Model
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
+
+    public function getTotalSumAttribute()
+    {
+        return $this->amount * ($this->product->price ?? 0);
+    }
 }
