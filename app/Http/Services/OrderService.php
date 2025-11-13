@@ -57,7 +57,6 @@ class OrderService
         DB::beginTransaction();
 
         try {
-
             $order = Order::query()->create([
                 'user_id' => $user,
                 'name' => $orderCreateDTO->getName(),

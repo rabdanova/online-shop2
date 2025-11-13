@@ -18,6 +18,8 @@ Route::post('/login',[UserController::class,'login'])->name('post.login');
 
 Route::get('/catalog', [ProductController::class,'getCatalog'])->name('catalog');
 
+Route::get('/Mail/testMail', [\App\Http\Controllers\TestMailController::class, 'send']);
+Route::get('/test', [\App\Http\Controllers\TestMailController::class, 'receive']);
 route::middleware(['auth'])->group(function () {
 
     Route::get('/logout', [UserController::class,'logout'])->name('logout');
