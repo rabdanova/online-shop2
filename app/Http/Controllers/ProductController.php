@@ -6,12 +6,15 @@ use App\Http\Requests\AddReviewRequest;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class ProductController
 {
     public function getCatalog()
     {
-        $products = Product::all();
+        $products = Cache::remember('products', 3600, function () {
+            return Product::all();
+        });
 
         return view('catalog', compact('products'));
     }

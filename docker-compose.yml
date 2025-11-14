@@ -12,6 +12,8 @@ services:
     volumes:
       - .:/var/www/html
       - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-xdebug.ini
+    depends_on:
+      - redis
 
   postgres:
     image: postgres:13.1
@@ -24,6 +26,12 @@ services:
     ports:
       - 54324:5432
 
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
 
   rabbitmq:
       image: rabbitmq:3-management
@@ -39,4 +47,6 @@ services:
 
 volumes:
     rabbitmq-data:
+
+
 
